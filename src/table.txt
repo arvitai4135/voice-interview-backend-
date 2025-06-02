@@ -1,0 +1,62 @@
+CREATE TYPE userrole AS ENUM ('admin', 'user');
+CREATE TYPE userstatus AS ENUM ('active', 'inactive');
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    phone_number VARCHAR(15) UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role userrole NOT NULL,
+    profile_path VARCHAR(255) DEFAULT 'default.jpg',
+    status userstatus DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT users_updated_at_check CHECK (updated_at >= created_at)
+);
+
+CREATE INDEX idx_users_email ON users (email);
+CREATE INDEX idx_users_phone_number ON users (phone_number);
+
+
+
+
+CREATE TYPE appointmentstatus AS ENUM ('active', 'inactive');
+
+CREATE TABLE appointments (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    mobile_number VARCHAR(15) NOT NULL,
+    medical_issue TEXT NOT NULL,
+    message TEXT,
+    status appointmentstatus DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT appointments_updated_at_check CHECK (updated_at >= created_at)
+);
+
+CREATE INDEX idx_appointments_email ON appointments (email);
+CREATE INDEX idx_appointments_mobile_number ON appointments (mobile_number);
+
+
+CREATE TABLE blogs (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    publish_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    categories TEXT[],
+    body JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Index on publish_date (for sorting latest blogs fast)
+CREATE INDEX idx_blogs_publish_date ON blogs(publish_date DESC);
+
+-- 3. GIN index on categories array (for searching/filtering blogs by category fast)
+CREATE INDEX idx_blogs_categories ON blogs USING GIN (categories);
+
+-- 4. GIN index on body JSONB (for searching inside the blog content if needed later)
+CREATE INDEX idx_blogs_body ON blogs USING GIN (body);
