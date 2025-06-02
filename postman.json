@@ -1,0 +1,1317 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+      "title": "Nutridiet",
+      "version": "v1"
+    },
+    "paths": {
+      "/api/users/login": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Login",
+          "description": "Login endpoint for users to authenticate and obtain both an access token and a refresh token.",
+          "operationId": "login_api_users_login_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginSchema"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/TokenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/users/info": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get User Info",
+          "description": "Endpoint to fetch user information using the JWT token.",
+          "operationId": "get_user_info_api_users_info_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            }
+          }
+        }
+      },
+      "/api/users/create": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Create User",
+          "description": "Endpoint to create a new user.",
+          "operationId": "create_user_api_users_create_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserSchema"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/users/get-profile-path": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Get User Profile Path",
+          "description": "Get the user's profile path from the database and verify its existence in S3.",
+          "operationId": "get_user_profile_path_api_users_get_profile_path_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserProfilePathResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            }
+          },
+          "security": [
+            {
+              "OAuth2PasswordBearer": []
+            }
+          ]
+        }
+      },
+      "/api/users/update-profile-path": {
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Update User Profile Path",
+          "description": "Upload the profile picture to S3 and update the profile path in the database.",
+          "operationId": "update_user_profile_path_api_users_update_profile_path_put",
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/Body_update_user_profile_path_api_users_update_profile_path_put"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2PasswordBearer": []
+            }
+          ]
+        }
+      },
+      "/api/users/update-user-info": {
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Update User Info",
+          "description": "Update user information.\nAdmins can update all fields.\nRegular users can update their name, phone number, and profile path.",
+          "operationId": "update_user_info_api_users_update_user_info_put",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseData"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2PasswordBearer": []
+            }
+          ]
+        }
+      },
+      "/api/users/change-password": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Change Password",
+          "description": "Endpoint to change the password for the logged-in user.",
+          "operationId": "change_password_api_users_change_password_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordSchema"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2PasswordBearer": []
+            }
+          ]
+        }
+      },
+      "/api/users/forgot-password": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Forgot Password",
+          "description": "Endpoint to handle forgotten password by sending a reset link or token.",
+          "operationId": "forgot_password_api_users_forgot_password_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordSchema"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/users/reset-password": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "summary": "Reset Password",
+          "description": "Endpoint to reset the password using a valid reset token.",
+          "operationId": "reset_password_api_users_reset_password_post",
+          "parameters": [
+            {
+              "name": "token",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "description": "Reset token from the URL",
+                "title": "Token"
+              },
+              "description": "Reset token from the URL"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Body_reset_password_api_users_reset_password_post"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/feedback/": {
+        "post": {
+          "tags": [
+            "feedback"
+          ],
+          "summary": "Create Feedback",
+          "description": "Create a feedback entry for the logged-in user.",
+          "operationId": "create_feedback_api_feedback__post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackCreate"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/FeedbackResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "OAuth2PasswordBearer": []
+            }
+          ]
+        }
+      },
+      "/api/appointments/create": {
+        "post": {
+          "tags": [
+            "Appointments"
+          ],
+          "summary": "Create Appointment",
+          "description": "Endpoint to create a new appointment.",
+          "operationId": "create_appointment_api_appointments_create_post",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAppointmentSchema"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "201": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/appointments/active": {
+        "get": {
+          "tags": [
+            "Appointments"
+          ],
+          "summary": "Get Active Appointment",
+          "description": "Endpoint to get the active appointment for the authenticated user.",
+          "operationId": "get_active_appointment_api_appointments_active_get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            }
+          }
+        }
+      },
+      "/api/appointments/delete/{appointment_id}": {
+        "delete": {
+          "tags": [
+            "Appointments"
+          ],
+          "summary": "Delete Appointment",
+          "description": "Endpoint to delete an appointment.",
+          "operationId": "delete_appointment_api_appointments_delete__appointment_id__delete",
+          "parameters": [
+            {
+              "name": "appointment_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "title": "Appointment Id"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/appointments/update/{appointment_id}": {
+        "put": {
+          "tags": [
+            "Appointments"
+          ],
+          "summary": "Update Appointment",
+          "description": "Endpoint to update an appointment (only admins can update status).",
+          "operationId": "update_appointment_api_appointments_update__appointment_id__put",
+          "parameters": [
+            {
+              "name": "appointment_id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "title": "Appointment Id"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateAppointmentSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found"
+            },
+            "422": {
+              "description": "Validation Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/HTTPValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/": {
+        "get": {
+          "summary": "Main Function",
+          "description": "Redirect to documentation (`/docs/`).",
+          "operationId": "main_function__get",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/token": {
+        "post": {
+          "summary": "Forward To Login",
+          "description": "Redirect to token-generation (`/auth/token`). Used to make Auth in Swagger-UI work.",
+          "operationId": "forward_to_login_token_post",
+          "responses": {
+            "200": {
+              "description": "Successful Response",
+              "content": {
+                "application/json": {
+                  "schema": {
+  
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "AppointmentStatus": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "title": "AppointmentStatus"
+        },
+        "Body_reset_password_api_users_reset_password_post": {
+          "properties": {
+            "new_password": {
+              "type": "string",
+              "title": "New Password",
+              "description": "New password for the user"
+            }
+          },
+          "type": "object",
+          "required": [
+            "new_password"
+          ],
+          "title": "Body_reset_password_api_users_reset_password_post"
+        },
+        "Body_update_user_profile_path_api_users_update_profile_path_put": {
+          "properties": {
+            "profile_picture": {
+              "type": "string",
+              "format": "binary",
+              "title": "Profile Picture"
+            }
+          },
+          "type": "object",
+          "required": [
+            "profile_picture"
+          ],
+          "title": "Body_update_user_profile_path_api_users_update_profile_path_put"
+        },
+        "ChangePasswordSchema": {
+          "properties": {
+            "old_password": {
+              "type": "string",
+              "title": "Old Password"
+            },
+            "new_password": {
+              "type": "string",
+              "title": "New Password"
+            }
+          },
+          "type": "object",
+          "required": [
+            "old_password",
+            "new_password"
+          ],
+          "title": "ChangePasswordSchema"
+        },
+        "CreateAppointmentSchema": {
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 100,
+              "title": "Name"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "title": "Email"
+            },
+            "mobile_number": {
+              "type": "string",
+              "pattern": "^\\+?[1-9]\\d{1,14}$",
+              "title": "Mobile Number"
+            },
+            "medical_issue": {
+              "type": "string",
+              "title": "Medical Issue"
+            },
+            "message": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Message"
+            },
+            "status": {
+              "$ref": "#/components/schemas/AppointmentStatus",
+              "default": "active"
+            }
+          },
+          "type": "object",
+          "required": [
+            "name",
+            "email",
+            "mobile_number",
+            "medical_issue"
+          ],
+          "title": "CreateAppointmentSchema"
+        },
+        "CreateUserSchema": {
+          "properties": {
+            "full_name": {
+              "type": "string",
+              "maxLength": 100,
+              "title": "Full Name"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "title": "Email"
+            },
+            "phone_number": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^\\+?[1-9]\\d{1,14}$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Phone Number"
+            },
+            "password": {
+              "type": "string",
+              "minLength": 8,
+              "title": "Password"
+            },
+            "profile_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Profile Path",
+              "default": "profile_pictures/default.png"
+            },
+            "status": {
+              "$ref": "#/components/schemas/UserStatusEnum",
+              "default": "active"
+            }
+          },
+          "type": "object",
+          "required": [
+            "full_name",
+            "email",
+            "password"
+          ],
+          "title": "CreateUserSchema"
+        },
+        "FeedbackCreate": {
+          "properties": {
+            "feedback": {
+              "type": "string",
+              "title": "Feedback"
+            },
+            "rating": {
+              "type": "integer",
+              "title": "Rating"
+            }
+          },
+          "type": "object",
+          "required": [
+            "feedback",
+            "rating"
+          ],
+          "title": "FeedbackCreate"
+        },
+        "FeedbackResponse": {
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "title": "Success"
+            },
+            "status": {
+              "type": "string",
+              "title": "Status"
+            },
+            "isActive": {
+              "type": "boolean",
+              "title": "Isactive"
+            },
+            "message": {
+              "type": "string",
+              "title": "Message"
+            },
+            "data": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/FeedbackResponseData"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "required": [
+            "success",
+            "status",
+            "isActive",
+            "message",
+            "data"
+          ],
+          "title": "FeedbackResponse"
+        },
+        "FeedbackResponseData": {
+          "properties": {
+            "id": {
+              "type": "integer",
+              "title": "Id"
+            },
+            "user_id": {
+              "type": "integer",
+              "title": "User Id"
+            },
+            "feedback": {
+              "type": "string",
+              "title": "Feedback"
+            },
+            "rating": {
+              "type": "integer",
+              "title": "Rating"
+            },
+            "status": {
+              "type": "string",
+              "title": "Status"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Created At"
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Updated At"
+            }
+          },
+          "type": "object",
+          "required": [
+            "id",
+            "user_id",
+            "feedback",
+            "rating",
+            "status",
+            "created_at",
+            "updated_at"
+          ],
+          "title": "FeedbackResponseData"
+        },
+        "ForgotPasswordSchema": {
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "title": "Email"
+            }
+          },
+          "type": "object",
+          "required": [
+            "email"
+          ],
+          "title": "ForgotPasswordSchema"
+        },
+        "HTTPValidationError": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError"
+        },
+        "LoginSchema": {
+          "properties": {
+            "email": {
+              "type": "string",
+              "title": "Email"
+            },
+            "password": {
+              "type": "string",
+              "title": "Password"
+            }
+          },
+          "type": "object",
+          "required": [
+            "email",
+            "password"
+          ],
+          "title": "LoginSchema"
+        },
+        "TokenResponse": {
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "title": "Success"
+            },
+            "status": {
+              "type": "integer",
+              "title": "Status"
+            },
+            "isActive": {
+              "type": "boolean",
+              "title": "Isactive"
+            },
+            "message": {
+              "type": "string",
+              "title": "Message"
+            },
+            "data": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Data"
+            }
+          },
+          "type": "object",
+          "required": [
+            "success",
+            "status",
+            "isActive",
+            "message",
+            "data"
+          ],
+          "title": "TokenResponse"
+        },
+        "UpdateAppointmentSchema": {
+          "properties": {
+            "status": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/AppointmentStatus"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": "active"
+            },
+            "medical_issue": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Medical Issue"
+            },
+            "message": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Message"
+            }
+          },
+          "type": "object",
+          "title": "UpdateAppointmentSchema"
+        },
+        "UserData": {
+          "properties": {
+            "id": {
+              "type": "integer",
+              "title": "Id"
+            },
+            "email": {
+              "type": "string",
+              "title": "Email"
+            },
+            "full_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Full Name"
+            },
+            "phone_number": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Phone Number"
+            },
+            "profile_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Profile Path"
+            },
+            "role": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
+            },
+            "status": {
+              "type": "string",
+              "title": "Status"
+            }
+          },
+          "type": "object",
+          "required": [
+            "id",
+            "email",
+            "profile_path",
+            "status"
+          ],
+          "title": "UserData"
+        },
+        "UserProfilePathResponse": {
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "title": "Success"
+            },
+            "status": {
+              "type": "integer",
+              "title": "Status"
+            },
+            "message": {
+              "type": "string",
+              "title": "Message"
+            },
+            "data": {
+              "type": "object",
+              "title": "Data"
+            }
+          },
+          "type": "object",
+          "required": [
+            "success",
+            "status",
+            "message",
+            "data"
+          ],
+          "title": "UserProfilePathResponse"
+        },
+        "UserResponse": {
+          "properties": {
+            "success": {
+              "type": "boolean",
+              "title": "Success"
+            },
+            "status": {
+              "type": "integer",
+              "title": "Status"
+            },
+            "isActive": {
+              "type": "boolean",
+              "title": "Isactive"
+            },
+            "message": {
+              "type": "string",
+              "title": "Message"
+            },
+            "data": {
+              "$ref": "#/components/schemas/UserData"
+            }
+          },
+          "type": "object",
+          "required": [
+            "success",
+            "status",
+            "isActive",
+            "message",
+            "data"
+          ],
+          "title": "UserResponse"
+        },
+        "UserResponseData": {
+          "properties": {
+            "id": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Id"
+            },
+            "full_name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Full Name"
+            },
+            "email": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "email"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Email"
+            },
+            "phone_number": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Phone Number"
+            },
+            "profile_path": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Profile Path"
+            },
+            "status": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            },
+            "role": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
+            }
+          },
+          "type": "object",
+          "title": "UserResponseData"
+        },
+        "UserStatusEnum": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "title": "UserStatusEnum"
+        },
+        "ValidationError": {
+          "properties": {
+            "loc": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ]
+              },
+              "type": "array",
+              "title": "Location"
+            },
+            "msg": {
+              "type": "string",
+              "title": "Message"
+            },
+            "type": {
+              "type": "string",
+              "title": "Error Type"
+            }
+          },
+          "type": "object",
+          "required": [
+            "loc",
+            "msg",
+            "type"
+          ],
+          "title": "ValidationError"
+        }
+      },
+      "securitySchemes": {
+        "OAuth2PasswordBearer": {
+          "type": "oauth2",
+          "flows": {
+            "password": {
+              "scopes": {
+  
+              },
+              "tokenUrl": "token"
+            }
+          }
+        }
+      }
+    }
+  }
