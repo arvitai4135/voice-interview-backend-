@@ -24,7 +24,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest || echo "No tests yet"
+        pytest || echo "No tests found - skipping"
 
     - name: Deploy to VPS (Password Auth)
       uses: appleboy/ssh-action@v1.0.3
@@ -34,8 +34,13 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
         script: |
-          cd /www/wwwroot/inhouse_project/
-          git pull origin main
+          cd /www/wwwroot/inhouse_project/ || exit 1
+          if [ ! -d "venv" ]; then
+            echo "Creating virtual environment..."
+            python3 -m venv venv
+          fi
           source venv/bin/activate
+          git pull origin main
+          pip install --upgrade pip
           pip install -r requirements.txt
-          systemctl restart interview-bot
+          sudo systemctl restart interview-bot || echo "Failed to restart service. Check logs."
