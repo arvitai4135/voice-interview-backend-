@@ -19,12 +19,12 @@ from src.routers.payment.schemas import CreatePaymentLinkSchema, PaymentWebhookS
 
 load_dotenv()
 
-# X_API_VERSION = os.getenv('X_API_VERSION') 
-# X_CLIENT_ID = os.getenv('X_CLIENT_ID')
-# X_CLIENT_SECRET = os.getenv('X_CLIENT_SECRET')
-X_API_VERSION = "2025-01-01"
-X_CLIENT_ID = "TEST1054866689924482d13e9e5bcb3266684501"
-X_CLIENT_SECRET ="cfsk_ma_test_d4b64c95e20dcabf3e4d528237b096f6_17162704" 
+X_API_VERSION = os.getenv('X_API_VERSION') 
+X_CLIENT_ID = os.getenv('X_CLIENT_ID')
+X_CLIENT_SECRET = os.getenv('X_CLIENT_SECRET')
+# X_API_VERSION = ""
+# X_CLIENT_ID = ""
+# X_CLIENT_SECRET ="" 
 
 
 # Dependency to get database session
