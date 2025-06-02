@@ -34,7 +34,7 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
         script: |
-          cd /www/wwwroot/arvitai/inhouse/
+          cd /www/wwwroot/inhouse_project/
           git pull origin main
           source venv/bin/activate
           pip install -r requirements.txt
