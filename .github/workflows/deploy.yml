@@ -1,4 +1,4 @@
-name: CI/CD for Flask App
+name: CI/CD for FastAPI App
 
 on:
   push:
@@ -34,13 +34,25 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         port: 22
         script: |
-          cd /www/wwwroot/inhouse_project/ || exit 1
+          cd /www/wwwroot/inhouse_project/
+
+          if [ ! -d "voice-interview-backend-" ]; then
+            echo "Cloning repository..."
+            git clone https://github.com/YOUR_USERNAME/voice-interview-backend-.git
+          fi
+
+          cd voice-interview-backend-
+
           if [ ! -d "venv" ]; then
             echo "Creating virtual environment..."
             python3 -m venv venv
           fi
+
           source venv/bin/activate
           git pull origin main
           pip install --upgrade pip
           pip install -r requirements.txt
-          sudo systemctl restart interview-bot || echo "Failed to restart service. Check logs."
+
+          echo "${{ secrets.ENV_CONTENT }}" > .env
+
+          sudo systemctl restart interview-bot || echo "Service restart failed. Check logs."
