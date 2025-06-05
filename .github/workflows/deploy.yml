@@ -38,7 +38,7 @@ jobs:
 
           if [ ! -d "voice-interview-backend-" ]; then
             echo "Cloning repository..."
-            git clone https://github.com/YOUR_USERNAME/voice-interview-backend-.git
+            git clone https://github.com/arvitai4135/voice-interview-backend-.git
           fi
 
           cd voice-interview-backend-
